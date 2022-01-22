@@ -1,15 +1,14 @@
 # This is the main program used in the thesis does test algorithms and lidar library.
 # 01.01.2022 Kamil Sikora <kamil.sikora@student.po.edu.pl>
 
-import lidr
+
 import time
-import eks
 import openpyxl
 import openpyxl as xl
 import numpy as np
 
 from rplidar import RPLidar
-from navi import Vehicle
+from Modules import eks, lidr, navi
 
 
 # The functions below are examples of using the rplidar
@@ -155,7 +154,7 @@ def standard_run():
                #my_tab_ref = [187,186,183]
                my_tab_ref = [my_tab_1[1],my_tab_1[2],my_tab_1[3]]
                dane = lidr.pre_detection(my_tab_1,my_tab_ref,15)
-               lazik = Vehicle()
+               lazik = navi.Vehicle()
                lazik.clr_danger(my_tab_1, dane)
                #print(do_zapisu)
                #zapisz_Dane_do_xlsx(do_zapisu,try_ok)
@@ -185,7 +184,7 @@ def test_modules():
 if __name__ == "__main__":
 
      print('First Line')
-     test_modules()
+     #test_modules()
      #standard_run()
 
 
