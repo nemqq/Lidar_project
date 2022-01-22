@@ -32,7 +32,7 @@ def fnc2(table, m_nazwa_p ):
 
 
 
-class Eksel():
+class Excel():
     '''
     Klasa z funkcjami do wpisywania danych do escela
 
@@ -60,7 +60,7 @@ class Eksel():
             wb.save(name)
             print('PLIK ZOSTAL UTWORZONY POMYSLNIE')
 
-    def zapisz_dane_row(self,name,tabe_1,u_row,u_col,case = True ):
+    def save_data_row(self, name, tabe_1, u_row, u_col, case = True):
         '''
         Zapis danych do akrusza
 
