@@ -1,21 +1,15 @@
-
-
 # This is the main program used in the thesis does test algorithms and lidar library.
 # 01.01.2022 Kamil Sikora <kamil.sikora@student.po.edu.pl>
 
-
-
-from rplidar import RPLidar
 import lidr
 import time
 import eks
-from navi import Vehicle
-import openpyxl as xl
 import openpyxl
+import openpyxl as xl
 import numpy as np
 
-
-
+from rplidar import RPLidar
+from navi import Vehicle
 
 
 def pomiar():
@@ -27,6 +21,7 @@ def pomiar():
      p=0
      print('START')
      print()
+
      for measurment in lidar.iter_measurments():
           #print(measurment)
           print('kat to : '+ str(measurment[2]))
@@ -78,20 +73,17 @@ def pomiar():
                print('cos poszlo nie tak ')
                break
 
-
-
-
           if i==700:
-
                break
+
           else:i+=1
-
-
 
 
      print(str(i))
      print(str(odleglosc))
+
      return odleglosc
+
 
 def zapisz_Dane_do_txt():
      ile = 0
@@ -113,6 +105,7 @@ def zapisz_Dane_do_txt():
 
 def zapisz_Dane_do_xlsx(dane,kol):
      print('zaczynamy')
+
      try:
 
           Arkusz_1 = eks.Eksel()
@@ -133,14 +126,11 @@ def zapisz_Dane_do_xlsx(dane,kol):
                Arkusz_1.zapisz_dane_row(nazwa_1,dane[2], 40, kol, True)
           else:print('tablica jesst pusta')
 
-
-
      except PermissionError:
           print('MASZ OTWARTY ARKUSZ ZAMKNIJ GO ZEBY KONTYNUOWAC !!')
 
      print()
      print('koniec')
-
 
 
 
@@ -195,4 +185,17 @@ print('koniec')
 print('koniec programu')
 
 '''
-print("hello")
+
+def test_modules():
+     tab_ref = [205,204,203,202,201,199,198,197,196,195,194,193,192,191,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,210]
+     tab_1 =   [205,0,111,111,151,129,128,0,0,195,224,223,192,220,220,221,222,223,224,225,226,227,250,250,190,190,190,190,190,192,293,207,208,209,210,0,205,200,190,192,193,195,198,200,205,180,180,209,210]
+
+     print(str(len(tab_1)) +"  " +str(len(tab_ref)) )
+     #lidr.detection_tab_ref(tab_1,tab_ref)
+     dane = lidr.pre_detection(tab_1,tab_ref,8)
+     # lazik=Vehicle()
+     # lazik.clr_danger(tab_1,dane)
+
+
+print('First Line')
+test_modules()

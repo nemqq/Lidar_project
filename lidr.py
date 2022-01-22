@@ -1,10 +1,9 @@
-
 # Obstacle detection
 # This module contains a set of functions for processing data obtained from lidar.
 # 01.01.2022 Kamil Sikora <kamil.sikora@student.po.edu.pl>
 
-
 from math  import  sin, radians
+
 
 def conversion(tab_cov,dig,case,split):
     tab_cm = [0] * len(tab_cov)
@@ -16,6 +15,7 @@ def conversion(tab_cov,dig,case,split):
 
     #rounding
     round_to_tenths = [round(num, dig) for num in tab_cm]
+
     if case == 1 :
         return round_to_tenths
     else:
@@ -24,6 +24,7 @@ def conversion(tab_cov,dig,case,split):
 def check_angle(high_lidr,dist_lidr):
     for i in range (20,70):
         dist = (high_lidr/(sin(radians(90-i))))
+
         if abs(dist-dist_lidr) <1:
             print('result at '+str(dist)+ ' : '+str(i))
             break
@@ -47,6 +48,7 @@ def generuj_tablice(kat_p=345,kat_k=300,od_k=210.0,step=2):
     k=-(range/2)
     print(range,k+'\n')
     tab_test=[0]*range
+
     for i in range(range):
         if k <= 0 :
             od_k -=step
@@ -55,6 +57,7 @@ def generuj_tablice(kat_p=345,kat_k=300,od_k=210.0,step=2):
             od_k +=step
             tab_test[i] = od_k
         k+=1
+
     return tab_test
 
 
@@ -64,6 +67,7 @@ def write_tab(tab):
     :param tab: list to pirnt
     :return:
     '''
+
     for i in range(len(tab)):
         print('probe nr :'+str(i)+ ' value : '+str(tab[i]))
 
@@ -75,14 +79,18 @@ def average_r(tab):
     :param tab: list with probe
     :return: av. difference between probe
     '''
+
     difference=[]
     sum = 0
+
     for i in range(len(tab)-1):
         difference.append(abs(round((tab[i]-tab[i+1]),2)))
     for i in difference:
         sum+=i
+
     print(difference)
     result = (sum/len(difference))
+
     return round(result,2)
 
 
@@ -103,26 +111,28 @@ def Detect_OBST(tab_z,tab_b,r_p):
     obstacle = []
     # very small<1m,  low , 1m - 600cm  high , very high,
     obst_size = []
+
     for i in tab_z:
         obst_size.append(len(i))
 
     print(obst_size)
-
     tab_avg = []
     i=0
     k=0
     c=0
+
     for i in tab_b:
 
         for c in i:
             k+=c
         tab_avg.append(round( k / len(i)))
         k=0
-    print(tab_avg)
 
+    print(tab_avg)
     print('\nhigh obstacles')
     i=0
     k=0
+
     for i in tab_avg:
 
         if r_p[k]:
@@ -135,6 +145,7 @@ def Detect_OBST(tab_z,tab_b,r_p):
             else :
                 print('przeszkoda nr : '+str(k+1)+'  jest bardzo wysoka i bardzo blisko')
                 object['high'] = 2
+
         else:
             if i < 180:
                 print('dziura nr : ' + str(k+1) + '  jest plytka')
@@ -145,11 +156,13 @@ def Detect_OBST(tab_z,tab_b,r_p):
             else :
                 print('dziura nr : '+str(k+1)+'  jest bardzo gleboka')
                 object['high'] = 2
+
         k += 1
         obstacle.append(dict(object))
 
     print('\nwidth obstacles')
     k=0
+
     for k in range (len(obst_size)):
 
         if obst_size[k] != 0 :
@@ -165,11 +178,13 @@ def Detect_OBST(tab_z,tab_b,r_p):
             elif obst_size[k] > 10 :
                 print("przeszkoda nr :" + str(k+1) + "  jest duza ")          #above 1cm
                 (obstacle[k])['width'] =3
-    k=0
 
+    k=0
     print('\ntype')
+
     for p in r_p:
         k+=1
+
         if p:
             print('object is {} obstacle'.format(str(k)))
             (obstacle[k - 1])['type'] = p
@@ -191,18 +206,15 @@ def pre_detection(tab,ref_tab,u_scope=7.5):
     :return: detected obstacle data
     '''
 
-
-
     zero_probe = []
     scope = u_scope
     child_p = ref_tab[0]
     falg = 0
     falga_2 = 0
-    last_ok_p=0
+    last_ok_p = 0
     wrong_probes = []
     tab_wrong = []
     tab_measurement_errors = []
-
     wrong_dist = []
     tab_wrong_dist = []
     obst_hole = False
@@ -213,27 +225,27 @@ def pre_detection(tab,ref_tab,u_scope=7.5):
         falga_2 = 1
 
     # main loop
+
     for i in range(len(tab)):
         print('\n beginning of the loop')
-        if i < (len(tab))-1:
+
+        if i < (len(tab)) - 1:
             print('probe nr. {}' .format(i))
             print('condiction')
-            war= round((abs(tab[i]-tab[i+1])),2)
+            war= round((abs(tab[i]-tab[i + 1])),2)
             print(war)
 
+            if ((war < scope)and falg == 0):
+                print('probe nr. {}  its ok  ' .format(i + 1))
 
-            if ((war<scope)and falg == 0):
-                print('probe nr. {}  its ok  ' .format(i+1))
-
-            elif ((war>=scope)or falg != 0):
-                print('probe nr. {} could be wrong '.format(i+1))
+            elif ((war >= scope)or falg != 0):
+                print('probe nr. {} could be wrong '.format(i + 1))
                 falg = 1
+
                 if i == 0 :
                     last_ok_p = child_p
-
                 elif last_ok_p == 0:
-                    last_ok_p= tab[i]
-
+                    last_ok_p = tab[i]
                 elif (i < (int(len(tab)*(1/3)))) and (i < (int(len(tab)/2))):
                      last_ok_p -= 1.4
                 elif(i < (int(len(tab)*(2/3)))) and (i < (int(len(tab)/2))):
@@ -242,41 +254,46 @@ def pre_detection(tab,ref_tab,u_scope=7.5):
                      last_ok_p += 0.5
                 elif (i > (int(len(tab)*(2/3)))) and (i > (int(len(tab)/2))):
                      last_ok_p += 1.4
+
                 print('prediction {}'.format(last_ok_p))
                 print(round( abs(tab[i+1] - last_ok_p),2))
                 war2 =round((abs(tab[i+1] - last_ok_p)),2)
-                if (tab[i+1] == 0):
-                    print('next probe have value {}' . format(str(tab[i+1])))
+
+                if (tab[i + 1] == 0):
+                    print('next probe have value {}' . format(str(tab[i + 1])))
                     print('wrong measu. quali')
-                    if i == 0 and tab[i]==0:
-                        zero_probe.append(i+1)
-                    elif i == 0 and tab[i]!=0 and falga_2 == 1 :
-                        wrong_probes.append(i+1)
+
+                    if i == 0 and tab[i] == 0:
+                        zero_probe.append(i + 1)
+                    elif i == 0 and tab[i] != 0 and falga_2 == 1:
+                        wrong_probes.append(i + 1)
                         wrong_dist.append(tab[i])
 
+                    zero_probe.append(i + 2)
 
-                    zero_probe.append(i+2)
+                elif round((abs(tab[i + 1] - last_ok_p)),2)  >= scope:
+                    print('last war. if done - probe nr, {}  its wrong'.format(i + 1))
 
-                elif round((abs(tab[i+1] - last_ok_p)),2)  >= scope:
-                    print('last war. if done - probe nr, {}  its wrong'.format(i+1))
-                    if i == 0 and tab[i]==0:
-                        zero_probe.append(i+1)
-                    elif i == 0 and tab[i]!=0 and falga_2 == 1:
-                        wrong_probes.append(i+1)
+                    if i == 0 and tab[i] == 0:
+                        zero_probe.append(i + 1)
+                    elif i == 0 and tab[i] != 0 and falga_2 == 1:
+                        wrong_probes.append(i + 1)
                         wrong_dist.append(tab[i])
 
-                    wrong_probes.append(i+2)
-                    wrong_dist.append(tab[i+1])
-                    #test after first probe
-                    if last_ok_p < tab[i+1]:
+                    wrong_probes.append(i + 2)
+                    wrong_dist.append(tab[i + 1])
+
+                    if last_ok_p < tab[i + 1]: #test after first probe
                         obst_hole = False
                     else: obst_hole =True
+
                 else:
                     falg = 0
                     falga_2 = 0
                     last_ok_p = 0
                     print('first was ok -flag set at 0')
                     print(zero_probe,'\n',wrong_probes)
+
                     if len(zero_probe) != 0 :
                         tab_measurement_errors.append(list(zero_probe))
                         zero_probe.clear()
@@ -309,6 +326,7 @@ def pre_detection(tab,ref_tab,u_scope=7.5):
             #     zle_probki.clear()
             #     bledne_odl.clear()
             # else
+
             if len(zero_probe) != 0:
                 tab_measurement_errors.append(list(zero_probe))
                 zero_probe.clear()
@@ -326,16 +344,20 @@ def pre_detection(tab,ref_tab,u_scope=7.5):
                 print('there were no erroneous measurements')
 
     # writing out the results & identifying the obstacle
+
     if tab_wrong != [] or tab_measurement_errors !=[]:
         print('\ntype of obstacle')
         print(r_obst)
         print('\nWRONG PROBE & DISTANCES')
         print(tab_wrong)
         print(tab_wrong_dist)
-        print('number of detected obstacles:'+str(len(tab_wrong)))
-        print('errors detected on the samples')
+        print('number of detected obstacles:  '+str(len(tab_wrong)))
+        print('\nerrors detected on the samples: ')
         print(tab_measurement_errors)
-        return Detect_OBST(tab_wrong,tab_wrong_dist,r_obst) , tab_wrong
+        print('\n\nDetected obstacles function start here')
+
+        return (Detect_OBST(tab_wrong,tab_wrong_dist,r_obst) , tab_wrong)
+
     else:
         print('RESULT: NO OBSTACLES DETECTED')
         print("\n\nALGORITHM NR.1")
