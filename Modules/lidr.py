@@ -6,6 +6,14 @@ from math import sin, radians
 
 
 def conversion(tab_cov, dig, case, split):
+    """
+    Function that converts measurement units, e.g. from cm to m, and rounds the result
+
+    :param tab_cov: data array to convert
+    :param dig: round option
+    :param case: option 1 round, option 2 tab in cm
+    :param split: divide by e.g. 10, 100 ,1000 to obtain the result
+    """
     tab_cm = [0] * len(tab_cov)
     k = 0
     for i in tab_cov:
@@ -20,9 +28,14 @@ def conversion(tab_cov, dig, case, split):
 
 
 def check_angle(high_lidr, dist_lidr):
+    """
+    Function that calculates the angle of the radar based on its height and distance
+
+    :param high_lidr: the height at which the device is located
+    :param dist_lidr: distance from measurement obtained form lidar
+    """
     for i in range(20, 70):
         dist = (high_lidr/(sin(radians(90-i))))
-
         if abs(dist-dist_lidr) < 1:
             print('result at '+str(dist) + ' : '+str(i))
             break
@@ -31,6 +44,7 @@ def check_angle(high_lidr, dist_lidr):
 def gen_board(kat_p=345, kat_k=300, od_k=210.0, step=2):
     """
     The function generate arrays from the range given by the user
+
     :param kat_p:
     :param kat_k:
     :param od_k:
@@ -56,6 +70,7 @@ def gen_board(kat_p=345, kat_k=300, od_k=210.0, step=2):
 def write_tab(tab):
     """
     Function write values from list
+
     :param tab: list to pirnt
     :return:
     """
@@ -86,6 +101,7 @@ def average_r(tab):
 def Detect_OBST(tab_z, tab_b, r_p):
     """
     Obstacle qualifying function
+
     :param tab_z: list with wrong probe
     :param tab_b: list with wrong distance
     :param r_p: type of obstacle
@@ -105,6 +121,7 @@ def Detect_OBST(tab_z, tab_b, r_p):
     print(obst_size)
     tab_avg = []
     k = 0
+
     for i in tab_b:
         for c in i:
             k += c
@@ -113,6 +130,7 @@ def Detect_OBST(tab_z, tab_b, r_p):
     print(tab_avg)
     print('\nhigh obstacles')
     k = 0
+
     for i in tab_avg:
         if r_p[k]:
             if i > 134:
@@ -124,7 +142,6 @@ def Detect_OBST(tab_z, tab_b, r_p):
             else:
                 print('obst nr.: '+str(k+1)+' is very high and is close')
                 object['high'] = 2
-
         else:
             if i < 180:
                 print('hole nr.: ' + str(k+1) + ' is plate')
@@ -135,7 +152,6 @@ def Detect_OBST(tab_z, tab_b, r_p):
             else:
                 print('hole nr.: '+str(k+1)+' is very deep')
                 object['high'] = 2
-
         k += 1
         obstacle.append(dict(object))
 
@@ -324,5 +340,5 @@ def pre_detection(tab, ref_tab, u_scope=7.5):
         print("\n\nALGORITHM NR.1")
 
 
-if __name__ == "__main__":
+if __name__ == "__lidr__":
     print('RUN FILE main.py !')
