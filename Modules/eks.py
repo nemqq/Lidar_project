@@ -14,7 +14,7 @@ def fnc2(table, m_name_p):
 
 
     :param table: list
-    :param m_nazwa_p: nazwa pliku txt (nazwa musi zawierac rozszerzenie .txt)
+    :param m_name_p: name of .txt file (name must contains .txt extension)
     :return:
     """
     try:
@@ -24,8 +24,8 @@ def fnc2(table, m_name_p):
             f.write("Data nr ... : " + str(counter) + "  " + str(table) + "\n")
 
     except FileNotFoundError:
-        testscik = open(m_name_p, "w")
-        testscik.close()
+        test = open(m_name_p, "w")
+        test.close()
         print("file with name " + m_name_p + "has been created")
 
 
@@ -35,7 +35,7 @@ class Excel:
     """
 
     @staticmethod
-    def stworz(name):
+    def create(name):
         """
         Create a file with .xlsx
         :param name: file with .xlsx

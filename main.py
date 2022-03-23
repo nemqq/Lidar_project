@@ -184,7 +184,7 @@ def test_modules():
 if __name__ == "__main__":
 
      print('First Line')
-     # test_modules()
+     test_modules()
      # standard_run()
 
 
