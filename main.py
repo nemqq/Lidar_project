@@ -73,7 +73,7 @@ def reading():
                          break
 
           else:
-               print('sometginh went worng')
+               print('something went wrong')
                break
 
           if i == 700:
@@ -81,10 +81,8 @@ def reading():
 
           else:
                i += 1
-
      print(str(i))
      print(str(dist))
-
      return dist
 
 
@@ -182,7 +180,7 @@ def test_modules():
      # lazik.clr_danger(tab_1,dane)
 
 
-# PRGRAM STARTS HERE!
+# PROGRAM STARTS HERE!
 if __name__ == "__main__":
 
      print('First Line')

@@ -1,52 +1,51 @@
-"""
+# Library for saving data from lidar to excel
+# Author: Kamil Sikora
+# Date: 01.01.2022
+# <kamil.sikora@studnet.po.edu.pl>
 
-Biblioteka do zapisu danych z lidara to eksela
-
-
-"""
 
 import openpyxl as xl
 from openpyxl.chart import LineChart, Reference
 
 
-def fnc2(table, m_nazwa_p):
+def fnc2(table, m_name_p):
     """
-    Funkcja wpisuje dane z talbicy do pliku txt
+    function writes data from list to txt file
 
 
-    :param table: tablica
+    :param table: list
     :param m_nazwa_p: nazwa pliku txt (nazwa musi zawierac rozszerzenie .txt)
     :return:
     """
     try:
-        with open(m_nazwa_p, "r+") as f:
+        with open(m_name_p, "r+") as f:
             text = f.readlines()
-            licznik = (len(text)) + 1
-            f.write("Dane nr ... : " + str(licznik) + "  " + str(table) + "\n")
+            counter = (len(text)) + 1
+            f.write("Data nr ... : " + str(counter) + "  " + str(table) + "\n")
 
     except FileNotFoundError:
-        testscik = open(m_nazwa_p, "w")
+        testscik = open(m_name_p, "w")
         testscik.close()
-        print("plik o nawie " + m_nazwa_p + "zostal utworzony")
+        print("file with name " + m_name_p + "has been created")
 
 
 class Excel:
     """
-    Klasa z funkcjami do wpisywania danych do escela
+    Class with functions for entering data into Excel
     """
 
     @staticmethod
     def stworz(name):
         """
-        Stworz plik z roszerzeniem xlsx
-        :param name: nazwa z roszerzeniem xlsx
+        Create a file with .xlsx
+        :param name: file with .xlsx
         :return:
         """
 
         try:
             wb = xl.load_workbook(name)
             wb.save(name)
-            print('PLIK NIE ZOSTAL UTWORZONY PONIEWAZ JUZ ISTNIEJE')
+            print('File was not created because it does not exist!')
 
         except:
 
@@ -54,17 +53,17 @@ class Excel:
             ws = wb.active
             ws.title = 'Data_1'
             wb.save(name)
-            print('PLIK ZOSTAL UTWORZONY POMYSLNIE')
+            print('THE FILE HAS BEEN CREATED SUCCESSFULLY ')
 
     def save_data_row(self, name, tabe_1, u_row, u_col, case=True):
         """
-        Zapis danych do akrusza
+        Writing data to the sheet
 
-        :param name: nazwa pliku z rozszerzeniem
-        :param tabe_1: dane z tablicy
-        :param u_row: poczatkowy rzad
-        :param u_col: poczatkowa kolumna
-        :param case: True - zapisz w dol , False - zapisz poziomo
+        :param name: file name with extension
+        :param tabe_1: data from the board
+        :param u_row: first row
+        :param u_col: first column
+        :param case: True - save perpendicularly, False - save horizontally
         :return:
         """
 
@@ -88,11 +87,12 @@ class Excel:
 
         wb.save(name)
 
-    def zapisz_dane_apend(self, name, tabe_1):
+    def save_data_apend(self, name, tabe_1):
         """
-        Dodaj apend
-        :param name:  nazwa pliku z rozszerzeniem
-        :param tabe_1:  dane z tablicy
+        apend
+
+        :param name:  file name
+        :param tabe_1:  data from board
         :return:
         """
         wb = xl.load_workbook(name)
@@ -100,9 +100,10 @@ class Excel:
         ws.append(tabe_1)
         wb.save(name)
 
-    def stworz_wykres(self, name):
+    def create_graph(self, name):
         """
-        Funkcja nie dopracowana
+        still in progress fun
+
         :param name:
         :return:
         """
@@ -113,8 +114,8 @@ class Excel:
         chart = LineChart()
         chart.title = 'Dane nr 1'
         chart.style = 1
-        # chart.x_axis.title='nr probki'
-        # chart.y_axis.title='odleglosc cm '
+        # chart.x_axis.title='nr probe'
+        # chart.y_axis.title='dist cm '
         chart.add_data(values)
         ws.add_chart(chart, "E15")
 
